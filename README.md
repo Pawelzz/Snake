@@ -8,3 +8,6 @@ wyposażona w elementy ścian, na których wąż może utracić swoje punkty zdr
 (lub po prostu jego długość będzie maleć). Możliwe będzie zaimplementowanie
 dodatkowych elementów, które będą np. zmniejszać bądź zwiększać statystyki węża.
 Gad będzie sterowany za pomocą klawiatury(np. strzałki).
+
+# Makieta
+![Makieta](Snake-makieta.png)
