@@ -7,7 +7,7 @@ Ponadto na mapie również w losowo wybranych miejscach będą pojawiać się dw
 Po zebraniu bonusu do przenikalności nasz gad będzie w stanie przenikać przez mury wygenerowane na planszy.
 Zaś działanie bonusu do spowolnienia jak sama nazwa wskazuje będzie sprawiało, że nasz wąż będzie wolniejszy (dzięki temu sterujący zyskuje więcej czasu na podjęcie decyzji i jest w stanie precyzyjniej poruszać się wężem). Oczywiście bonusy te będą ograniczone czasowo.
 Gra będzie wzbogacona o różnego rodzaju tekstury. Sama mapa będzie wyposażona w elementy ścian (jak już wspomniane wyżej), na których wąż może utracić swoje punkty zdrowia w momencie uderzenia, kiedy nie będzie miał aktywnego bonusu do przenikalności.
-Gad będzie sterowany za pomocą klawiatury(np. strzałki).
+Gad będzie sterowany za pomocą strzałek na klawiaturze.
 
 # Makieta
 ![Makieta](Snake-makieta.png)
