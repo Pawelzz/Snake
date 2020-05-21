@@ -11,4 +11,6 @@ Gad będzie sterowany za pomocą strzałek na klawiaturze.
 
 # Makieta
 ![Makieta](Snake-makieta.png)
-* Owoc-
+* Owoc - ![Owoc](Owoc.png)
+* Bonus(przenikalność) - ![Bonus.1](Boost-przenikalnosc.png)
+* Bonus(spowolnienie) - ![Bonus.2](Boost-spowolnienie.png)
