@@ -20,12 +20,14 @@ class Stan_gry
     void owoc_spawn();
 };
 
-class Snake
+class Snake :public Sprite
 {
     float zycie;
     float ilosc_segmentow;
     float predkosc;
     bool przenikalnosc;
+
+
 
 public:
     Snake();
