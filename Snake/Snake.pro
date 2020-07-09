@@ -6,7 +6,9 @@ CONFIG -= qt
 INCLUDEPATH += "C:/Qt/SFML-2.5.1/include"
 
 SOURCES += \
-        main.cpp
+        elementsceny.cpp \
+        main.cpp \
+        owoc.cpp
 
 LIBS += -L"C:/Qt/SFML-2.5.1/lib"
 CONFIG(debug, debug|release){
@@ -16,4 +18,6 @@ CONFIG(debug, debug|release){
 }
 
 HEADERS += \
-    Snake.h
+    Snake.h \
+    elementsceny.h \
+    owoc.h

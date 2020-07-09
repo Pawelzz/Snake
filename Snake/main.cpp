@@ -1,15 +1,16 @@
 #include "Snake.h"
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
+#include "elementsceny.h"
+#include "owoc.h"
+#include "list"
 
 using namespace std;
 using namespace sf;
 
-int main() {
-    // create the window
+int main()
+{
     sf::RenderWindow window(sf::VideoMode(1200, 750), "Snake");
 
-    // create some shapes
+    srand( time( NULL ) );
 
     Texture texture_grass;
     if(!texture_grass.loadFromFile("grass.png")) { return 1; }
@@ -19,117 +20,32 @@ int main() {
     grass.setTexture(texture_grass);
     grass.setTextureRect(sf::IntRect(0, 0, 1200, 750));
 
-    Texture texture_snake;
-    if(!texture_snake.loadFromFile("snake-graphics.png")) { return 1; }
-    texture_snake.setRepeated(true);
-    texture_snake.setSmooth(true);
-    Sprite snake;
-    snake.setTexture(texture_snake);
-//    snake.setTextureRect(sf::IntRect(256, 0, 64, 64));
+    Snake snake;
 
-//    sf::RectangleShape rectangle(sf::Vector2f(30, 30));
-    snake.setPosition(500.0, 400.0);
-//    rectangle.setFillColor(sf::Color(100, 50, 250));
-
-    bool w_gore=0;
-    bool w_dol=0;
-    bool w_prawo=1;
-    bool w_lewo=0;
-
-    float pozycja_x = snake.getPosition().x;
-    float pozycja_y = snake.getPosition().y;
-
-    // run the program as long as the window is open
+    Owoc fruit;
+    Clock Czas;
     while (window.isOpen()) {
-        // check all the window's events that were triggered since the last iteration of the loop
         sf::Event event;
-        while (window.pollEvent(event)) {
-            // "close requested" event: we close the window
+        while (window.pollEvent(event))
+        {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
 
-        pozycja_x = snake.getPosition().x;
-        pozycja_y = snake.getPosition().y;
+        snake.jedzenie(fruit);
 
-        if(w_prawo)
-        {
-            snake.setPosition(pozycja_x+0.2,pozycja_y);
-            snake.setTextureRect(sf::IntRect(256, 0, 64, 64));
-        }
-        if(w_lewo)
-        {
-            snake.setPosition(pozycja_x-0.2,pozycja_y);
-            snake.setTextureRect(sf::IntRect(192, 64, 64, 64));
-        }
-        if(w_gore)
-        {
-            snake.setPosition(pozycja_x,pozycja_y-0.2);
-            snake.setTextureRect(sf::IntRect(192, 0, 64, 64));
-        }
-        if(w_dol)
-        {
-            snake.setPosition(pozycja_x,pozycja_y+0.2);
-            snake.setTextureRect(sf::IntRect(256, 64, 64, 64));
-        }
+        snake.animate();
+        snake.bodyanimate(Czas);
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && w_lewo==0)
-        {
-            w_prawo=1;
-            w_dol=0;
-            w_gore=0;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && w_prawo==0)
-        {
-            w_lewo=1;
-            w_gore=0;
-            w_dol=0;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && w_dol==0)
-        {
-            w_gore=1;
-            w_lewo=0;
-            w_prawo=0;
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && w_gore==0)
-        {
-            w_dol=1;
-            w_lewo=0;
-            w_prawo=0;
-        }
-
-        if (snake.getGlobalBounds().left<0)
-        {
-            snake.setPosition(600,350);
-        }
-        if (snake.getGlobalBounds().left+snake.getGlobalBounds().width>1200)
-        {
-            snake.setPosition(600,350);
-        }
-        if (snake.getGlobalBounds().top<0)
-        {
-            snake.setPosition(600,350);
-        }
-        if (snake.getGlobalBounds().top+snake.getGlobalBounds().height>750)
-        {
-            snake.setPosition(600,350);
-        }
-
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && w_gore==1)
+//        for(int i=100; i>0; i--)
 //        {
-//            w_gore=0;
-//            w_lewo=1;
+//            snake[i].pos_x=snake[i-1].pos_x;
+//            snake[i].pos_y=snake[i-1].pos_y;
 //        }
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && w_dol==1)
-//        {
-//            w_dol=0;
-//            w_lewo=1;
-//        }
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && w_lewo==1)
-//        {
-//            w_lewo=0;
-//            w_dol=1;
-//        }
+
+
+
+
 
         // clear the window with black color
         window.clear(sf::Color::Black);
@@ -138,6 +54,12 @@ int main() {
 
         window.draw(grass);
         window.draw(snake);
+        for(int i=0;i<snake.m_snake.size()-1;i++)
+        {
+            window.draw(snake.m_snake[i]);
+        }
+        //cout<<snake.m_snake.size()-1<<endl;
+        window.draw(fruit);
 
         // end the current frame
         window.display();
