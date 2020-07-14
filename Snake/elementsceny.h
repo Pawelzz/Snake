@@ -17,6 +17,8 @@ using namespace sf;
 
 class ElementSceny : public Sprite
 {
+    Texture texture;
+
 public:
     ElementSceny()
     {

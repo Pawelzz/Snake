@@ -15,7 +15,18 @@ public:
         setTexture(texture);
         setTextureRect(sf::IntRect(0, 192, 64, 64));
         setPosition(100.0, 100.0);
+        setScale(0.5,0.5);
     }
+
+    void owoc_resp(ElementSceny &el)
+    {
+        if(getGlobalBounds().intersects(el.getGlobalBounds()))
+        {
+            setPosition((rand()%1137), (rand()%687));
+        }
+    }
+
+
 };
 
 #endif // OWOC_H

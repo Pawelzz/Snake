@@ -1,7 +1,8 @@
 #include "Snake.h"
 #include "elementsceny.h"
 #include "owoc.h"
-#include "list"
+#include "wall.h"
+#include "boost.h"
 
 using namespace std;
 using namespace sf;
@@ -12,6 +13,13 @@ int main()
 
     srand( time( NULL ) );
 
+    sf::Music music;
+    if (!music.openFromFile("arcade.wav"))
+        return -1; // error
+    music.play();
+    music.setLoop(true);
+    music.setVolume(20);
+
     Texture texture_grass;
     if(!texture_grass.loadFromFile("grass.png")) { return 1; }
     texture_grass.setRepeated(true);
@@ -20,10 +28,41 @@ int main()
     grass.setTexture(texture_grass);
     grass.setTextureRect(sf::IntRect(0, 0, 1200, 750));
 
+    vector<ElementSceny*> wek;
+
     Snake snake;
+
+    vector<Wall*> wektor;
+
+    wektor.emplace_back(new Wall(939,70));
+    wektor.emplace_back(new Wall(977,70));
+    wektor.emplace_back(new Wall(1015,70));
+    wektor.emplace_back(new Wall(1053,70));
+
+    wektor.emplace_back(new Wall(130,180));
+    wektor.emplace_back(new Wall(130,218));
+    wektor.emplace_back(new Wall(130,256));
+    wektor.emplace_back(new Wall(130,294));
+    wektor.emplace_back(new Wall(168,294));
+    wektor.emplace_back(new Wall(206,294));
+    wektor.emplace_back(new Wall(244,294));
+    wektor.emplace_back(new Wall(282,294));
+
+    wektor.emplace_back(new Wall(600,465));
+    wektor.emplace_back(new Wall(600,503));
+    wektor.emplace_back(new Wall(600,541));
+    wektor.emplace_back(new Wall(600,579));
+
+    wektor.emplace_back(new Wall(900,500));
+    wektor.emplace_back(new Wall(938,462));
+    wektor.emplace_back(new Wall(976,424));
+    wektor.emplace_back(new Wall(1014,386));
 
     Owoc fruit;
     Clock Czas;
+    Clock Czas2;
+    Clock Czas3;
+    //    Boost slow(Czas3);
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
@@ -32,18 +71,18 @@ int main()
                 window.close();
         }
 
+
+        snake.kolizja_cialo();
+
         snake.jedzenie(fruit);
-
-        snake.animate();
-        snake.bodyanimate(Czas);
-
-//        for(int i=100; i>0; i--)
-//        {
-//            snake[i].pos_x=snake[i-1].pos_x;
-//            snake[i].pos_y=snake[i-1].pos_y;
-//        }
+        //        slow.resp(Czas3);
 
 
+
+
+
+        snake.animate(Czas);
+        snake.bodyanimate(Czas2);
 
 
 
@@ -54,12 +93,31 @@ int main()
 
         window.draw(grass);
         window.draw(snake);
-        for(int i=0;i<snake.m_snake.size()-1;i++)
+        for(size_t i=0;i<snake.m_snake.size()-1;i++)
         {
             window.draw(snake.m_snake[i]);
         }
-        //cout<<snake.m_snake.size()-1<<endl;
+
         window.draw(fruit);
+
+        for (auto &el : wektor)
+        {
+            fruit.owoc_resp(*el);
+            window.draw(*el);
+        }
+
+
+        //        snake.kolizja_sciana(wektor);
+
+        if(snake.get_b_kolizja_sciana()==1)
+        {
+            cout<<"Uderzyles w sciane!"<<endl<<"GAME OVER"<<endl;
+            return 0;
+        }
+
+
+
+        //        window.draw(slow);
 
         // end the current frame
         window.display();
