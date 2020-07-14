@@ -45,6 +45,8 @@ private:
 
     int ilosc_segmentow=0;
 
+    bool przenikalnosc;
+
     float tempo;
 
     bool w_gore=0;
@@ -57,7 +59,7 @@ public:
 
     SnakeBody m_snake;
 
-    //    bool przenikalnosc;
+
 
 
 public:
@@ -74,7 +76,12 @@ public:
         buffer2.loadFromFile("self-bite.wav");
         sound.setBuffer(buffer);
         sound2.setBuffer(buffer2);
+        przenikalnosc=0;
         tempo=0.002;
+        for(int i = 0;i<2;i++)
+        {
+            rozszerzenie();
+        }
     }
     Direction m_dir;
 
@@ -83,9 +90,9 @@ public:
         SnakeElement &Last = m_snake[m_snake.size()-1];
         if(m_snake.size()>1)
         {
-            SnakeElement &Second = m_snake[m_snake.size()-2];
+            //SnakeElement &Second = m_snake[m_snake.size()-2];
 
-            if(Last.position.x == Second.position.x)
+            /*if(Last.position.x == Second.position.x)
             {
                 if(Last.position.y > Second.position.y)
                 {
@@ -106,29 +113,22 @@ public:
                 {
                     m_snake.push_back(SnakeElement(Last.texture,Last.position.x-100, Last.position.y));
                 }
-            }
+            }*/
+            m_snake.push_back(SnakeElement(Last.texture,Last.position.x, Last.position.y));
         }
         else
         {
-            switch(m_dir)
-            {
-            case Direction::Up:
-                m_snake.push_back(SnakeElement(Last.texture,Last.position.x, Last.position.y+100));
-                break;
-            case Direction::Down:
-                m_snake.push_back(SnakeElement(Last.texture,Last.position.x, Last.position.y-100));
-                break;
-            case Direction::Left:
-                m_snake.push_back(SnakeElement(Last.texture,Last.position.x+100, Last.position.y));
-                break;
-            case Direction::Right:
-                m_snake.push_back(SnakeElement(Last.texture,Last.position.x-100, Last.position.y));
-                break;
-            case Direction::None:
-                break;
-            }
+            m_snake.push_back(SnakeElement(Last.texture,Last.position.x, Last.position.y));
+            m_snake[0].texture.loadFromFile("transparent.png");
+            m_snake[0].setTexture(m_snake[0].texture);
+            rozszerzenie();
         }
 
+    }
+
+    int get_score()
+    {
+        return get_ilosc_segmentow()-4;
     }
 
     int get_ilosc_segmentow()
@@ -151,7 +151,7 @@ public:
     {
         if(Czas2.getElapsedTime().asSeconds()>0.09)
         {
-            for(int i=m_snake.size()-1;i>0;i--)
+            for(int i=m_snake.size()-1;i>=0;i--)
             {
                 m_snake[i].position = m_snake[i-1].position;
                 m_snake[i].UpdatePart();
@@ -162,6 +162,7 @@ public:
 
     void animate(Clock &Czas)
     {
+        b_kolizja_sciana=false;
         m_snake[0].position.x = getPosition().x;
         m_snake[0].position.y = getPosition().y;
         m_snake[0].UpdatePart();
@@ -172,25 +173,26 @@ public:
             if(w_prawo)
             {
                 setPosition(getPosition().x+1,getPosition().y);
-                setTextureRect(sf::IntRect(256, 0, 64, 64));
+                setTextureRect(sf::IntRect(255, 1, 62, 62));
                 m_dir = Direction::Right;
             }
             if(w_lewo)
             {
                 setPosition(getPosition().x-1,getPosition().y);
-                setTextureRect(sf::IntRect(192, 64, 64, 64));
+                setTextureRect(sf::IntRect(194, 65, 62, 62));
                 m_dir = Direction::Left;
             }
             if(w_gore)
             {
                 setPosition(getPosition().x,getPosition().y-1);
-                setTextureRect(sf::IntRect(192, 0, 64, 64));
+                //setTextureRect(sf::IntRect(192, 0, 64, 64));
+                setTextureRect(sf::IntRect(193, 2, 62, 62));
                 m_dir = Direction::Up;
             }
             if(w_dol)
             {
                 setPosition(getPosition().x,getPosition().y+1);
-                setTextureRect(sf::IntRect(256, 64, 64, 64));
+                setTextureRect(sf::IntRect(257, 63, 62, 62));
                 m_dir = Direction::Down;
             }
             Czas.restart();
@@ -246,9 +248,10 @@ public:
         {
             element.setPosition((rand()%1137), (rand()%687));
             sound.play();
-            ilosc_segmentow+=1;
+            //ilosc_segmentow+=1;
             rozszerzenie();
-            cout << "segmenty: "<<get_ilosc_segmentow()<<endl;
+            //cout << "segmenty: "<<get_ilosc_segmentow()<<endl;
+            cout<<"segmenty: "<<m_snake.size()<<endl;
 
             for(size_t i=0; i<get_snake_body().size(); i++)
             {
@@ -262,30 +265,42 @@ public:
 
     void kolizja_cialo()
     {
-        for(size_t i=3; i<m_snake.size(); i++)
-        {
-            if(m_snake[i].getGlobalBounds().contains((m_snake[0].getPosition().x+m_snake[0].getGlobalBounds().width/2),(m_snake[0].getPosition().y+m_snake[0].getGlobalBounds().height/2)))
+        if(w_gore != 0 || w_dol != 0 || w_prawo != 0 || w_lewo != 0)
+            for(size_t i=3; i<m_snake.size(); i++)
             {
-                for(auto j=m_snake.end(); j>=m_snake.begin()+i; j--)
+                if(m_snake[i].getGlobalBounds().contains((m_snake[0].getPosition().x+m_snake[0].getGlobalBounds().width/2),(m_snake[0].getPosition().y+m_snake[0].getGlobalBounds().height/2)))
                 {
-                    m_snake.erase(j);
-                    sound2.play();
+                    //                cout<<"cut"<<endl;
+                    for(auto j=m_snake.end(); j>=m_snake.begin()+i; j--)
+                    {
+                        if(j>m_snake.begin()+4)
+                        {
+                            m_snake.erase(j);
+                            sound2.play();
+                        }
+                    }
+                    //                cout<<"zostalo "<<m_snake.size()<<endl;
+                }
+            }
+    }
+
+    void set_przenikalnosc_true()
+    {
+        przenikalnosc=true;
+    }
+
+    void kolizja_sciana(vector<Wall*> const &sciany)
+    {
+        if(przenikalnosc==0)
+        {
+            for (auto const &el : sciany)
+            {
+                if(m_snake[0].getGlobalBounds().intersects(el->getGlobalBounds()))
+                {
+                    b_kolizja_sciana=true;
                 }
             }
         }
     }
-
-    //    void kolizja_sciana(vector<Wall*> const &sciany)
-    //    {
-    //        for (auto const &el : sciany)
-    //        {
-    //            if(m_snake[0].getGlobalBounds().intersects(el->getGlobalBounds()))
-    //            {
-    //                b_kolizja_sciana=true;
-
-    //            }
-
-    //        }
-    //    }
 
 };
