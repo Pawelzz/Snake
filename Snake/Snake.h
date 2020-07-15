@@ -6,8 +6,10 @@
 
 #endif // SNAKE_H
 
-class SnakeElement :public ElementSceny
+struct SnakeElement :public ElementSceny
 {
+private:
+
 public:Texture texture;
 public:Vector2f position;
 public:SnakeElement(Texture txt, float x, float y)
@@ -253,13 +255,13 @@ public:
             //cout << "segmenty: "<<get_ilosc_segmentow()<<endl;
             cout<<"segmenty: "<<m_snake.size()<<endl;
 
-            for(size_t i=0; i<get_snake_body().size(); i++)
-            {
-                if(element.getGlobalBounds().intersects(m_snake[i].getGlobalBounds()))
-                {
-                    element.setPosition((rand()%1137), (rand()%687));
-                }
-            }
+//            for(size_t i=0; i<get_snake_body().size(); i++)
+//            {
+//                if(element.getGlobalBounds().intersects(m_snake[i].getGlobalBounds()))
+//                {
+//                    element.setPosition((rand()%1137), (rand()%687));
+//                }
+//            }
         }
     }
 

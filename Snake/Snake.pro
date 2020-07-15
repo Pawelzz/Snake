@@ -6,8 +6,10 @@ CONFIG -= qt
 INCLUDEPATH += "C:/Qt/SFML-2.5.1/include"
 
 SOURCES += \
+        Snake.cpp \
         boost.cpp \
         elementsceny.cpp \
+        game.cpp \
         main.cpp \
         owoc.cpp \
         wall.cpp
@@ -23,5 +25,6 @@ HEADERS += \
     Snake.h \
     boost.h \
     elementsceny.h \
+    game.h \
     owoc.h \
     wall.h

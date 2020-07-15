@@ -7,31 +7,23 @@ class Boost : public ElementSceny
 private:
     Texture txt;
 public:
-    Boost(Clock &czas)
+    Boost()
     {
-        if((rand()%2)==0)
-        {
-            txt.loadFromFile("slow.png");
-            txt.setSmooth(true);
-            setTexture(txt);
-        }
-        else
-        {
-            txt.loadFromFile("slow.png");
-            txt.setSmooth(true);
-            setTexture(txt);
-        }
-
+        txt.loadFromFile("star.png");
+        txt.setSmooth(true);
+        setTexture(txt);
+        setScale(0,0);
     }
 
-    //    void resp()
-    //    {
-    //        if(czas.getElapsedTime().asSeconds()>10)
-    //        {
-    //            setPosition((rand()%1137), (rand()%687));
-    //            setScale(0.05,0.05);
-    //        }
-    //    }
+//    void resp(Clock &czas, sf::RenderWindow &window)
+//    {
+//        if(czas.getElapsedTime().asSeconds()>10)
+//        {
+//            setPosition((rand()%1137), (rand()%687));
+//            setScale(0.1,0.1);
+//            window.draw()
+//        }
+//    }
 };
 
 #endif // BOOST_H

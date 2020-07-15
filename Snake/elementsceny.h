@@ -21,9 +21,7 @@ class ElementSceny : public Sprite
 
 public:
     ElementSceny()
-    {
-
-    }
+    {}
 };
 
 #endif // ELEMENTSCENY_H
