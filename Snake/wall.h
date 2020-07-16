@@ -5,6 +5,7 @@
 
 class Wall :public ElementSceny
 {
+private:
 
     Texture texture_wall;
 public:

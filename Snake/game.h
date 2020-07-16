@@ -3,7 +3,7 @@
 #include "elementsceny.h"
 #include "boost.h"
 #include "owoc.h"
-#include "Snake.h"
+//#include "Snake.h"
 #include "wall.h"
 
 class Game
@@ -17,7 +17,10 @@ private:
     sf::Font font;
     sf::Text text;
     Clock Time;
+    Clock Time2;
     int i_time;
+    sf::Font font1;
+    sf::Text text1;
     sf::Font font2;
     sf::Text text2;
     sf::Font font3;
@@ -31,6 +34,19 @@ private:
     Owoc fruit;
     Clock Czas;
     Clock Czas2;
+    Clock Czas3;
+
+    bool b_boost=false;
+
+    bool is_drawable=true;
+
+
+    Clock zegar;
+
+
+
+    //    Boost boost;
+    vector<Boost*> boosty;
 
     void initWindow()
     {
@@ -39,10 +55,10 @@ private:
 
     void initMusic()
     {
-        music.openFromFile("arcade.wav");
-        music.play();
-        music.setLoop(true);
-        music.setVolume(20);
+        //        music.openFromFile("arcade.wav");
+        //        music.play();
+        //        music.setLoop(true);
+        //        music.setVolume(20);
     }
 
     void initTexture()
@@ -61,6 +77,11 @@ private:
         text.setFillColor(sf::Color::White);
         text.setPosition(0,700);
         text.setFont(font);
+        font1.loadFromFile("text.otf");
+        text1.setCharacterSize(40);
+        text1.setFillColor(sf::Color::White);
+        text1.setPosition(350,700);
+        text1.setFont(font1);
         font2.loadFromFile("text.otf");
         text2.setCharacterSize(40);
         text2.setFillColor(sf::Color::White);
@@ -100,7 +121,10 @@ private:
         wektor.emplace_back(new Wall(1014,386));
 
         wektor.emplace_back(&table);
+
+
     }
+
 
 public:
 
@@ -127,14 +151,6 @@ public:
             {
                 this->window->close();
             }
-//            if (this->sfEvent.type == sf::Event::KeyPressed)
-//            {
-//                if (this->sfEvent.key.code == sf::Keyboard::Up || this->sfEvent.key.code == sf::Keyboard::Down || this->sfEvent.key.code == sf::Keyboard::Left || this->sfEvent.key.code == sf::Keyboard::Right )
-//                {
-//                    is_playin=true;
-//                }
-//            }
-
         }
     }
     void update()
@@ -151,9 +167,38 @@ public:
         snake.bodyanimate(Czas2);
         snake.kolizja_sciana(wektor);
 
+        if(boosty.empty()==true)
+        {
+            boosty.emplace_back(new Boost);
+        }
+
+        if(Time2.getElapsedTime().asSeconds() ==10)
+        {
+            is_drawable=true;
+            b_boost=true;
+
+        }
+        if(Time2.getElapsedTime().asSeconds() >10 && is_drawable==true)
+        {
+            cout<<"xxxx"<<endl;
+            boosty[0]->zebranie(snake,Czas3);
+            b_boost=true;
+        }
+        if(boosty[0]->get_couter()>=10 && is_drawable==true)
+        {
+            Time2.restart();
+            is_drawable=false;
+            delete boosty[0];
+            boosty.clear();
+            b_boost=false;
+
+        }
+
         i_time=Time.getElapsedTime().asSeconds();
 
         text.setString("Time: "+to_string(i_time)+"s");
+
+        text1.setString("Transparency:           ");
 
         text2.setString("Score: "+to_string((snake.get_score())));
 
@@ -177,16 +222,25 @@ public:
             this->window->draw(*el);
         }
 
+        if(b_boost==true && is_drawable==true)
+        {
+            this->window->draw(*boosty[0]);
+
+        }
+
+
 
         this->window->draw(text);
+        this->window->draw(text1);
         this->window->draw(text2);
+
 
 
 
         if(snake.get_b_kolizja_sciana()==1)
         {
             is_playin=false;
-            text3.setString("GAME OVER :c");
+            text3.setString("GAME OVER");
             this->window->draw(text3);
             music.stop();
         }

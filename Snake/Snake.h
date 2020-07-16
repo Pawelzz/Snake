@@ -31,7 +31,6 @@ public:void UpdatePart()
 };
 
 using SnakeBody = vector<SnakeElement>;
-enum class Direction {None, Up, Down, Left, Right};
 
 class Snake :public ElementSceny
 {
@@ -61,10 +60,6 @@ public:
 
     SnakeBody m_snake;
 
-
-
-
-public:
     Snake()
     {
         texture_head.loadFromFile("snake-graphics.png");
@@ -85,37 +80,12 @@ public:
             rozszerzenie();
         }
     }
-    Direction m_dir;
 
     void rozszerzenie()
     {
         SnakeElement &Last = m_snake[m_snake.size()-1];
         if(m_snake.size()>1)
         {
-            //SnakeElement &Second = m_snake[m_snake.size()-2];
-
-            /*if(Last.position.x == Second.position.x)
-            {
-                if(Last.position.y > Second.position.y)
-                {
-                    m_snake.push_back(SnakeElement(Last.texture,Last.position.x, Last.position.y+100));
-                }
-                else
-                {
-                    m_snake.push_back(SnakeElement(Last.texture,Last.position.x, Last.position.y-100));
-                }
-            }
-            else if(Last.position.y == Second.position.y)
-            {
-                if(Last.position.x>Second.position.x)
-                {
-                    m_snake.push_back(SnakeElement(Last.texture,Last.position.x+100, Last.position.y));
-                }
-                else
-                {
-                    m_snake.push_back(SnakeElement(Last.texture,Last.position.x-100, Last.position.y));
-                }
-            }*/
             m_snake.push_back(SnakeElement(Last.texture,Last.position.x, Last.position.y));
         }
         else
@@ -125,7 +95,6 @@ public:
             m_snake[0].setTexture(m_snake[0].texture);
             rozszerzenie();
         }
-
     }
 
     int get_score()
@@ -176,29 +145,23 @@ public:
             {
                 setPosition(getPosition().x+1,getPosition().y);
                 setTextureRect(sf::IntRect(255, 1, 62, 62));
-                m_dir = Direction::Right;
             }
             if(w_lewo)
             {
                 setPosition(getPosition().x-1,getPosition().y);
                 setTextureRect(sf::IntRect(194, 65, 62, 62));
-                m_dir = Direction::Left;
             }
             if(w_gore)
             {
                 setPosition(getPosition().x,getPosition().y-1);
-                //setTextureRect(sf::IntRect(192, 0, 64, 64));
                 setTextureRect(sf::IntRect(193, 2, 62, 62));
-                m_dir = Direction::Up;
             }
             if(w_dol)
             {
                 setPosition(getPosition().x,getPosition().y+1);
                 setTextureRect(sf::IntRect(257, 63, 62, 62));
-                m_dir = Direction::Down;
             }
             Czas.restart();
-
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && w_lewo==0)
@@ -250,18 +213,8 @@ public:
         {
             element.setPosition((rand()%1137), (rand()%687));
             sound.play();
-            //ilosc_segmentow+=1;
+            ilosc_segmentow+=1;
             rozszerzenie();
-            //cout << "segmenty: "<<get_ilosc_segmentow()<<endl;
-            cout<<"segmenty: "<<m_snake.size()<<endl;
-
-//            for(size_t i=0; i<get_snake_body().size(); i++)
-//            {
-//                if(element.getGlobalBounds().intersects(m_snake[i].getGlobalBounds()))
-//                {
-//                    element.setPosition((rand()%1137), (rand()%687));
-//                }
-//            }
         }
     }
 
@@ -272,7 +225,6 @@ public:
             {
                 if(m_snake[i].getGlobalBounds().contains((m_snake[0].getPosition().x+m_snake[0].getGlobalBounds().width/2),(m_snake[0].getPosition().y+m_snake[0].getGlobalBounds().height/2)))
                 {
-                    //                cout<<"cut"<<endl;
                     for(auto j=m_snake.end(); j>=m_snake.begin()+i; j--)
                     {
                         if(j>m_snake.begin()+4)
@@ -281,14 +233,23 @@ public:
                             sound2.play();
                         }
                     }
-                    //                cout<<"zostalo "<<m_snake.size()<<endl;
                 }
             }
     }
 
-    void set_przenikalnosc_true()
+    void set_przenikalnosc(bool const &choice)
     {
-        przenikalnosc=true;
+        if(choice==true)
+        {
+            przenikalnosc=true;
+        }
+        else
+            przenikalnosc=false;
+    }
+
+    bool get_przenikalnosc()
+    {
+        return przenikalnosc;
     }
 
     void kolizja_sciana(vector<Wall*> const &sciany)
