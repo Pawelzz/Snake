@@ -1,5 +1,4 @@
 #include "elementsceny.h"
-//ElementSceny::ElementSceny()
-//{
 
-//}
+ElementSceny::ElementSceny()
+{}

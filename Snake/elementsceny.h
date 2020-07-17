@@ -20,8 +20,7 @@ class ElementSceny : public Sprite
     Texture texture;
 
 public:
-    ElementSceny()
-    {}
+    ElementSceny();
 
 };
 

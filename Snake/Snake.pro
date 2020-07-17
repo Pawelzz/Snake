@@ -7,7 +7,6 @@ INCLUDEPATH += "C:/Qt/SFML-2.5.1/include"
 
 SOURCES += \
         Snake.cpp \
-        boost.cpp \
         elementsceny.cpp \
         game.cpp \
         main.cpp \
@@ -23,7 +22,6 @@ CONFIG(debug, debug|release){
 
 HEADERS += \
     Snake.h \
-    boost.h \
     elementsceny.h \
     game.h \
     owoc.h \

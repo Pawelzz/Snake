@@ -3,7 +3,6 @@
 #include "elementsceny.h"
 #include "boost.h"
 #include "owoc.h"
-//#include "Snake.h"
 #include "wall.h"
 
 class Game
@@ -13,6 +12,7 @@ private:
     Event sfEvent;
 
     bool is_playin=true;
+
     sf::Music music;
     sf::Font font;
     sf::Text text;
@@ -36,234 +36,31 @@ private:
     Clock Czas2;
     Clock Czas3;
 
-    bool b_boost=false;
-
-    bool is_drawable=true;
-
+    bool is_flies=false;
 
     Clock zegar;
 
+    void initWindow();
 
+    void initMusic();
 
-    //    Boost boost;
-    vector<Boost*> boosty;
+    void initTexture();
 
-    void initWindow()
-    {
-        this->window = new RenderWindow(sf::VideoMode(1200, 750), "Snake");
-    }
+    void initFont();
 
-    void initMusic()
-    {
-        //        music.openFromFile("arcade.wav");
-        //        music.play();
-        //        music.setLoop(true);
-        //        music.setVolume(20);
-    }
-
-    void initTexture()
-    {
-        texture_grass.loadFromFile("grass.png");
-        texture_grass.setRepeated(true);
-        texture_grass.setSmooth(true);
-        grass.setTexture(texture_grass);
-        grass.setTextureRect(sf::IntRect(0, 0, 1200, 750));
-    }
-
-    void initFont()
-    {
-        font.loadFromFile("text.otf");
-        text.setCharacterSize(40);
-        text.setFillColor(sf::Color::White);
-        text.setPosition(0,700);
-        text.setFont(font);
-        font1.loadFromFile("text.otf");
-        text1.setCharacterSize(40);
-        text1.setFillColor(sf::Color::White);
-        text1.setPosition(350,700);
-        text1.setFont(font1);
-        font2.loadFromFile("text.otf");
-        text2.setCharacterSize(40);
-        text2.setFillColor(sf::Color::White);
-        text2.setPosition(1000,700);
-        text2.setFont(font2);
-        font3.loadFromFile("text.otf");
-        text3.setCharacterSize(80);
-        text3.setFillColor(sf::Color::Red);
-        text3.setPosition(325,300);
-        text3.setFont(font3);
-    }
-
-    void initWalls()
-    {
-        wektor.emplace_back(new Wall(939,70));
-        wektor.emplace_back(new Wall(977,70));
-        wektor.emplace_back(new Wall(1015,70));
-        wektor.emplace_back(new Wall(1053,70));
-
-        wektor.emplace_back(new Wall(130,180));
-        wektor.emplace_back(new Wall(130,218));
-        wektor.emplace_back(new Wall(130,256));
-        wektor.emplace_back(new Wall(130,294));
-        wektor.emplace_back(new Wall(168,294));
-        wektor.emplace_back(new Wall(206,294));
-        wektor.emplace_back(new Wall(244,294));
-        wektor.emplace_back(new Wall(282,294));
-
-        wektor.emplace_back(new Wall(600,465));
-        wektor.emplace_back(new Wall(600,503));
-        wektor.emplace_back(new Wall(600,541));
-        wektor.emplace_back(new Wall(600,579));
-
-        wektor.emplace_back(new Wall(900,500));
-        wektor.emplace_back(new Wall(938,462));
-        wektor.emplace_back(new Wall(976,424));
-        wektor.emplace_back(new Wall(1014,386));
-
-        wektor.emplace_back(&table);
-
-
-    }
-
+    void initWalls();
 
 public:
 
+    Game();
+    virtual ~Game();
 
+    void updateSFMLEvents();
 
-    Game()
-    {
-        this->initWindow();
-        this->initTexture();
-        this->initMusic();
-        this->initWalls();
-        this->initFont();
-    }
-    virtual ~Game()
-    {
-        delete this->window;
-    }
+    void update();
+    void render();
 
-    void updateSFMLEvents()
-    {
-        while (this->window->pollEvent(this->sfEvent))
-        {
-            if(this->sfEvent.type==Event::Closed)
-            {
-                this->window->close();
-            }
-        }
-    }
-    void update()
-    {
-        this->updateSFMLEvents();
-    }
-    void render()
-    {
-        this->window->clear();
-
-        snake.kolizja_cialo();
-        snake.jedzenie(fruit);
-        snake.animate(Czas);
-        snake.bodyanimate(Czas2);
-        snake.kolizja_sciana(wektor);
-
-        if(boosty.empty()==true)
-        {
-            boosty.emplace_back(new Boost);
-        }
-
-        if(Time2.getElapsedTime().asSeconds() ==10)
-        {
-            is_drawable=true;
-            b_boost=true;
-
-        }
-        if(Time2.getElapsedTime().asSeconds() >10 && is_drawable==true)
-        {
-            cout<<"xxxx"<<endl;
-            boosty[0]->zebranie(snake,Czas3);
-            b_boost=true;
-        }
-        if(boosty[0]->get_couter()>=10 && is_drawable==true)
-        {
-            Time2.restart();
-            is_drawable=false;
-            delete boosty[0];
-            boosty.clear();
-            b_boost=false;
-
-        }
-
-        i_time=Time.getElapsedTime().asSeconds();
-
-        text.setString("Time: "+to_string(i_time)+"s");
-
-        text1.setString("Transparency:           ");
-
-        text2.setString("Score: "+to_string((snake.get_score())));
-
-        // clear the window with black color
-        this->window->clear(sf::Color::Black);
-
-        // draw everything here...
-
-        this->window->draw(grass);
-        for(size_t i=0;i<snake.m_snake.size()-1;i++)
-        {
-            this->window->draw(snake.m_snake[i]);
-        }
-        this->window->draw(snake);
-
-        this->window->draw(fruit);
-
-        for (auto &el : wektor)
-        {
-            fruit.owoc_resp(*el);
-            this->window->draw(*el);
-        }
-
-        if(b_boost==true && is_drawable==true)
-        {
-            this->window->draw(*boosty[0]);
-
-        }
-
-
-
-        this->window->draw(text);
-        this->window->draw(text1);
-        this->window->draw(text2);
-
-
-
-
-        if(snake.get_b_kolizja_sciana()==1)
-        {
-            is_playin=false;
-            text3.setString("GAME OVER");
-            this->window->draw(text3);
-            music.stop();
-        }
-
-
-
-        this->window->display();
-    }
-
-    void run()
-    {
-        while (this->window->isOpen())
-        {
-            this->update();
-
-            if(is_playin==1)
-            {
-                this->render();
-            }
-
-        }
-    }
-
+    void run();
 };
 
 #endif // GAME_H
