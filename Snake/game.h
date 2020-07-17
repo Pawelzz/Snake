@@ -1,9 +1,9 @@
 #ifndef GAME_H
 #define GAME_H
 #include "elementsceny.h"
-#include "boost.h"
 #include "owoc.h"
 #include "wall.h"
+#include "Snake.h"
 
 class Game
 {

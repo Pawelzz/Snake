@@ -746,7 +746,6 @@ game.o: ../Snake/game.cpp ../Snake/game.h \
 		C:/Qt/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
 		C:/Qt/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
 		C:/Qt/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp \
-		../Snake/boost.h \
 		../Snake/Snake.h \
 		../Snake/owoc.h \
 		../Snake/wall.h
@@ -845,7 +844,6 @@ main.o: ../Snake/main.cpp ../Snake/game.h \
 		C:/Qt/SFML-2.5.1/include/SFML/Audio/SoundFileFactory.inl \
 		C:/Qt/SFML-2.5.1/include/SFML/Audio/SoundFileReader.hpp \
 		C:/Qt/SFML-2.5.1/include/SFML/Audio/SoundFileWriter.hpp \
-		../Snake/boost.h \
 		../Snake/Snake.h \
 		../Snake/owoc.h \
 		../Snake/wall.h

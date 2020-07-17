@@ -1,10 +1,5 @@
 #include "owoc.h"
 
-//Owoc::Owoc()
-//{
-
-//}
-
 Owoc::Owoc()
 {
     texture.loadFromFile("Textures/snake-graphics.png");

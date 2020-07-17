@@ -1,10 +1,5 @@
 #include "wall.h"
 
-//Wall::Wall()
-//{
-
-//}
-
 Wall::Wall(const float &pos_x, const float &pos_y)
 {
     texture_wall.loadFromFile("Textures/wall.png");
